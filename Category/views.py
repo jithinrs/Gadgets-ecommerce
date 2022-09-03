@@ -1,13 +1,13 @@
 from multiprocessing import context
-from unicodedata import category
 from django.shortcuts import render,redirect
 from .models import Categories,SubCategories
 from .form import Categoryform, SubCategoryForm
+from django.contrib.admin.views.decorators import staff_member_required 
 
 
 
 # category views
-
+@staff_member_required(login_url='admin_login')
 def category_list(request):
     category=Categories.objects.all()
     context={
@@ -15,6 +15,7 @@ def category_list(request):
     }
     return render(request,'Category/category.html',context)
 
+@staff_member_required(login_url='admin_login')
 def category_add(request):
     if request.method == 'POST':
         form = Categoryform(request.POST , request.FILES)
@@ -39,7 +40,7 @@ def category_delete(request,id):
 
 
 #sub category views
-
+@staff_member_required(login_url='admin_login')
 def sub_category_list(request, id):
     sub_category=SubCategories.objects.filter(category = id)
     context={
@@ -49,7 +50,7 @@ def sub_category_list(request, id):
 
 
 
-
+@staff_member_required(login_url='admin_login')
 def sub_category_add(request):
     if request.method == 'POST':
         form = SubCategoryForm(request.POST , request.FILES)

@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render,redirect
 from django.contrib.auth import logout,login,authenticate
 from .form import UserForm,Account
-from django.contrib.admin.views.decorators import staff_member_required 
+from django.contrib.admin.views.decorators import staff_member_required  
 # Create your views here.
 def Admin_login(request):
     
@@ -22,7 +22,7 @@ def Admin_login(request):
 def Admin_page(request):
     return render(request,'Admin/dashbord.html')
 
-
+@staff_member_required(login_url='admin_login')
 def Admin_logout(request):
     logout(request)
     return redirect(Admin_login)
@@ -30,7 +30,7 @@ def Admin_logout(request):
 
 
 #To display all user
-
+@staff_member_required(login_url='admin_login')
 def user_display(request):
     user=Account.objects.filter(is_superadmin = False)
     form = UserForm()
@@ -40,16 +40,14 @@ def user_display(request):
     }
     return render(request,'Admin/admin-display-user.html',context) 
 
+@staff_member_required(login_url='admin_login')
 def user_block(request,id,flag):
     if request.method == 'POST':
+         person = Account.objects.get( id = id)
          if flag ==1:
-            user = Account.objects.get( id = id)
-            user.is_active = False
-            print('user is blocked')
-            user.save()
+            person.is_active = False
+            person.save()
          else: 
-            user = Account.objects.get( id = id)
-            user.is_active = True
-            print('user is blocked')
-            user.save()
+            person.is_active = True
+            person.save()
          return redirect(user_display)

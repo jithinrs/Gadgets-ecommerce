@@ -40,17 +40,25 @@ def Login(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         try:
-            user = Account.objects.get(email=email)
+            person = Account.objects.get(email=email)
         except :
-            messages.error(request,"user Does not exist..")
+            messages.error(request,"User Does not exist..")
+            return redirect(Login)
+
         user = authenticate(request,email=email,password=password)
+              
         if user is not None:
-            auth.login(request,user)
-            return redirect('home') 
+            if person.is_active:
+                auth.login(request,user)
+                return redirect('home')
+            elif person.is_active == False:
+                messages.error(request,"Account is Blocked..")
         else:
-            messages.error(request,'user does not exist..')
+            messages.error(request,'Invalid Password')
             return redirect('login')
     return render(request,'Accounts/login.html')
+
+
 def Logout(request):
     logout(request)
     return redirect('home')
