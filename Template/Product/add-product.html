@@ -1,0 +1,96 @@
+{% extends 'Admin/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+{% block content %}
+
+
+
+<div class="card-body">
+  <form method='POST' action="" enctype="">
+  {% csrf_token %}
+
+    <div class="form-group">
+    <label>Product</label>
+    {% render_field form.product_name id="product_name" placeholder="Name" class="form-control" %}
+    </div>
+    <div class="form-group">
+    <label>slug</label>
+    {% render_field form.slug  id="slug" placeholder="slug" class="form-control" %}
+    </div>
+
+    <div class="form-group">
+      <label>brand</label>
+      {% render_field form.brand  placeholder="brand" class="form-control" %}
+    </div>
+
+    <div class="form-group">
+      <label>price</label>
+      {% render_field form.price  placeholder="price" class="form-control" %}
+    </div>
+
+    <div class="form-group">
+      <label>image1</label>
+      {% render_field form.product_image_1   class="form-control" %}
+    </div>
+
+    <div class="form-group">
+      <label>image2</label>
+      {% render_field form.product_image_2  placeholder="brand" class="form-control" %}
+    </div>
+
+    <div class="form-group">
+      <label>image3</label>
+      {% render_field form.product_image_3  placeholder="brand" class="form-control" %}
+    </div>
+
+    <div class="form-group">
+      <label>image4</label>
+      {% render_field form.product_image_4  placeholder="brand" class="form-control" %}
+    </div>
+
+
+    <div class="form-group">
+      <label>discription</label>
+      {% render_field form.product_description  placeholder="" class="form-control" %}
+    </div>
+
+    
+    <div class="form-group">
+      <label>category</label>
+      {% render_field form.category_id class="form-control" %}
+    </div>
+
+
+    <div class="form-group">
+      <label>sub category</label>
+      {% render_field form.subcategory_id class="form-control" %}
+    </div>
+
+    <div class="form-group">
+      <label>Stock</label>
+      {% render_field form.stock class="form-control" %}
+    </div>
+    
+ 
+
+    <button class="btn btn-primary btn-block" type="submit">SAVE</button>
+  
+  </form>
+</div>
+<!-- copy from here -->
+</div>
+<!-- content-wrapper ends -->
+</div>
+<!-- main-panel ends -->
+<script>
+  document.getElementById("product_name").onkeyup=function(){
+    document.getElementById("slug").value=document.getElementById("product_name").value.toLowerCase().replaceAll(" ","-");
+  }
+</script>
+</body>
+<!-- page-body-wrapper ends -->
+</html>
+<!-- container-scroller -->
+{% endblock %}

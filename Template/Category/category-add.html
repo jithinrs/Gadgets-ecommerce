@@ -1,0 +1,39 @@
+{% extends 'Admin/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+{% block content %}
+
+
+
+<div class="card-body">
+<form method='POST' action="" enctype="">
+    {% csrf_token %}
+
+  <div class="form-group">
+  <label>Category</label>
+  {% render_field form.category_name name="category_name" id="category_name" placeholder="category" class="form-control" %}
+  </div>
+  <div class="form-group">
+  <label>slug</label>
+  {% render_field form.slug name="slug" id="slug" placeholder="categorys" class="form-control" %}
+  </div>
+  <button class="btn btn-primary btn-block" type="submit">SAVE Category</button>
+</form>
+</div>
+<!-- copy from here -->
+</div>
+<!-- content-wrapper ends -->
+</div>
+<!-- main-panel ends -->
+<script>
+  document.getElementById("category_name").onkeyup=function(){
+    document.getElementById("slug").value=document.getElementById("category_name").value.toLowerCase().replaceAll(" ","-");
+  }
+</script>
+</body>
+<!-- page-body-wrapper ends -->
+</html>
+<!-- container-scroller -->
+{% endblock %}
