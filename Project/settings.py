@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     'Category',
     'widget_tweaks',
     'Product',
-    'Store'
+    'Store',
+    'Cart',
+    'Order'
 ]
 
 MIDDLEWARE = [
@@ -68,7 +70,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'Category.context_processor.menu_links'
+                'Category.context_processor.menu_links',
+                'Cart.context_processor.counter'
             ],
         },
     },

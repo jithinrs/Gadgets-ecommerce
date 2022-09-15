@@ -31,7 +31,7 @@
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
 </head>
 
-<body>
+<body id="total-count">
     <!-- Start Header Area -->
     <header class="header-section d-none d-xl-block">
         <div class="header-wrapper">
@@ -42,29 +42,59 @@
                             <!-- Start Header Logo -->
                             <div class="header-logo">
                                 <div class="logo">
-                                    <a href=""><img src="{% static 'assets/images/logo/logo_white.png' %}" alt=""></a>
+                                    <a href="{% url 'home' %}"><img src="{% static 'assets/images/logo/logo_white.png' %}" alt=""></a>
                                 </div>
                             </div>
+
+                            
+
+
+                            
                             <div>
-                                <a class="btn btn-primary btn-sm ml-3" href="{% url 'store' %}" >Store</a>
                             </div>
-                            <div class="ml-auto">
-                                    {% if user.is_authenticated %}
-                                    <a href="{% url 'logout' %}" class="nav-item nav-link d-inline">Logout</a>
-                                    {%else%}
+                            {% if user.is_authenticated %}
+                            <div class="main-menu menu-color--white menu-hover-color--pink ml-auto">
+                                <nav class="">
+                                    <ul>
+                                 
+                                        <li class="has-dropdown">
+                                            <a href="#">Account <i
+                                                    class="fa fa-angle-down"></i></a>
+                                            <!-- Sub Menu -->
+                                            <ul class="sub-menu">
+                                                <li><a href="{% url 'user_profile' %}">Profile Information</a>
+                                                </li>
+                                                <li><a href="{% url 'logout' %}">Log Out</a>
+                                                </li>
+                                            </ul>
+                                        </li>  
+                                    </ul>
+                                </nav>
+                            </div>
+
+
+
+                            {%else%}
+                            <div class="ml-auto main-menu menu-color--white menu-hover-color--pink">
+                                    
                                     <a href="{% url 'login' %}" class="nav-item nav-link d-inline">Login</a>
                                     <a href="{% url 'signup' %}" class="nav-item nav-link d-inline">Register</a>
-                                    {%endif%}
                             </div>
+                            {%endif%}
+
+                            <div class="mr-3">
+                                    <a class="btn btn-primary btn-sm ml-3" href="{% url 'store' %}" >Store</a> 
+                            </div>
+
                             <!-- End Header Logo -->
 
 
                             <!-- Start Header Action Link -->
                             <ul class="header-action-link action-color--white action-hover-color--pink"> 
                                 <li>
-                                    <a href="#offcanvas-add-cart" class="offcanvas-toggle">
+                                    <a href="{% url 'cart' %}" class="">
                                         <i class="icon-bag"></i>
-                                        <span class="item-count">3</span>
+                                        <span class="item-count">{{cart_count}}</span>   
                                     </a>
                                 </li>
                                 <li>
@@ -86,6 +116,30 @@
         </div>
     </header>
     <!-- Start Header Area -->
+
+
+    <!-- Start Offcanvas Mobile Menu Section -->
+    <div id="offcanvas-about" class="offcanvas offcanvas-rightside offcanvas-mobile-about-section">
+        <!-- Start Offcanvas Header -->
+        <div class="offcanvas-header text-right">
+            <button class="offcanvas-close"><i class="ion-android-close"></i></button>
+        </div> <!-- End Offcanvas Header -->
+        <!-- Start Offcanvas Mobile Menu Wrapper -->
+        <!-- Start Mobile contact Info -->
+        <div class="mobile-contact-info">
+            <div class="logo">
+                <a href="{% url 'home' %}"><img src="{% static  'assets/images/logo/logo_white.png' %}" alt=""></a>
+            </div>
+
+            <ul class="user-link">
+                <li><a href="wishlist.html">Wishlist</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="checkout.html">Checkout</a></li>
+            </ul>
+        </div>
+        <!-- End Mobile contact Info -->
+    </div>
+    <!-- ...:::: End Offcanvas Mobile Menu Section:::... -->
 
     {% block content %}
     

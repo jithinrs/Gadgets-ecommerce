@@ -1,19 +1,23 @@
+
 from django.shortcuts import render,redirect
+
+from Cart.models import Cart, CartItem
+from Cart.views import _cart_id, add_cart
 from .models import Account
-from.form import RegistrtationForm
 from django.contrib import messages,auth
 from .verify import send_otp, verify_otp
 from .form import *
 from .models import *
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.decorators import login_required
-
-
+from .form import RegistrtationForm,UserUpdationForm
 # Create your views here.
 def Register(request):
+    if request.user.is_authenticated:
+        return redirect('home')
     if request.method=='POST':
         form=RegistrtationForm(request.POST)
-        if form.is_valid:
+        if form.is_valid():
             first_name = request.POST['first_name']
             last_name  = request.POST['last_name']
             email      = request.POST['email']
@@ -25,10 +29,10 @@ def Register(request):
             request.session['email']      = email
             request.session['mobile']     = mobile
             request.session['password']   = password
-            
-            print("mobile: ",mobile)
+
             send_otp(mobile)
             return redirect('verify')
+
     form=RegistrtationForm()
     context ={'form':form}
     return render(request,'Accounts/register.html',context)
@@ -49,6 +53,26 @@ def Login(request):
               
         if user is not None:
             if person.is_active:
+                try:
+                    cart = Cart.objects.get(cart_id = _cart_id(request))
+                    is_cart_item_exists = CartItem.objects.filter(cart=cart).exists()
+                    
+                    if is_cart_item_exists:
+                        cart_item = CartItem.objects.filter(cart=cart)
+                        for item in cart_item:
+                            try:
+                                cart_item = CartItem.objects.get(product=item.product,user=user)
+                                cart_item.quantity += 1
+
+                            except CartItem.DoesNotExist:
+                                cart_item = CartItem.objects.create(
+                                    product = item.product,
+                                    quantity = 1,
+                                    user=user
+                                    )
+                            cart_item.save()
+                except:
+                    pass
                 auth.login(request,user)
                 return redirect('home')
             elif person.is_active == False:
@@ -100,3 +124,31 @@ def verify_code(request):
     return render(request,'Accounts/verify.html')
 
 
+
+
+#user details
+
+def user_profile(request):
+    user_details=Account.objects.filter(id = request.user.id)
+    context={
+        'user_detail':user_details
+    }
+    return render(request,'UserSide/user-profile.html',context)
+
+def user_profile_update(request):
+    id=Account.objects.get(id = request.user.id)
+    if request.method == 'POST':
+        form = UserUpdationForm(request.POST , request.FILES, instance=id)
+        if form.is_valid():
+            print('form is valid')
+            form.save()
+            return redirect(user_profile)
+        else:
+            # messages.error(request , 'Details is not valid please check it!!')
+            return redirect(user_profile)
+    else:
+        form = UserUpdationForm(instance=id)
+        context = {
+            'form' : form,
+        }
+    return render(request , 'UserSide/user-update.html' , context)

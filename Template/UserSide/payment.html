@@ -1,0 +1,141 @@
+{% extends 'Accounts/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+    <!-- ...:::: Start Cart Section:::... -->
+    <div class="cart-section my-5">
+        
+
+        <!-- Start Coupon Start -->
+        <div class="coupon_area">
+            <div class="container">
+                <div class="row">
+                    <!-- <div class="col-lg-6 col-md-6">
+                        <div class="coupon_code left" data-aos="fade-up" data-aos-delay="200">
+                            <h3>Coupon</h3>
+                            <div class="coupon_inner">
+                                <p>Enter your coupon code if you have one.</p>
+                                <input class="mb-2" placeholder="Coupon code" type="text">
+                                <button type="submit" class="btn btn-md btn-golden">Apply coupon</button>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="col-lg-6 clo-md-6">
+                        <div class="coupon_code left" data-aos="fade-up" data-aos-delay="200">
+                            <div class="card">
+                                <h5 class="card-header">Billing Address</h5>
+                                <div class="card-body">
+                                  <p class="card-text mb-0">{{order.full_name}}</p>
+                                  <p class="card-text mb-0">{{order.full_address}}</p>
+                                  <p class="card-text mb-0">{{order.city}}, {{order.state}}</p>
+                                  <p class="card-text mb-0">{{order.country}}</p>
+                                  <p class="card-text mb-0">{{order.email}}</p>
+                                  <p class="card-text mb-0">{{order.phone}}</p>
+                                  {% if order.order_note %}
+                                    <b>Order Note:</b> {{order.order_note}}
+                                   {%endif%} 
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <h5 class="card-header">Payment Method</h5>
+                                <div class="card-body">
+                                  <p class="card-text">Papy Pal</p>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <h5 class="card-header">Review Products</h5>
+                                <div class="card-body">
+                                    <div class="order_table table-responsive">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Product</th>
+                                                    <th>Image</th>
+                                                    <th>Total</th>
+                                                </tr>
+                                            </thead>
+                                            {% for cart_item in cart_items %}
+                                            <tbody>
+                                                <tr>
+                                                    <td>{{ cart_item.product.product_name }}<strong> × {{ cart_item.quantity }}</strong></td>
+                                                    <td class="product_thumb"><a href="#"><img
+                                                        src="{{ cart_item.product.product_image_1.url }}" style="width: 60px; height:30px"
+                                                        alt="img"></a>
+                                                    </td>
+                                                    <td> ₹{{cart_item.product.price}}</td>
+                                                </tr>
+                                            </tbody>
+                                            {%endfor%}
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-lg-6 col-md-6 ml-auto">
+                        <div class="coupon_code right" data-aos="fade-up" data-aos-delay="400">
+                            <h3>Cart Totals</h3>
+                            <div class="coupon_inner">
+                                <div class="cart_subtotal">
+                                    <p>Subtotal</p>
+                                    <p class="cart_amount">₹{{total}}.00</p>
+                                </div>
+                                <div class="cart_subtotal ">
+                                    <p>Shipping</p>
+                                    <p class="cart_amount"><span>Flat Rate:</span> ₹{{delivery_charge}}</p>
+                                </div>
+
+                                <div class="cart_subtotal">
+                                    <p>Total</p>
+                                    <p class="cart_amount">₹{{grand_total}}.00</p>
+                                </div>
+                                <div class="checkout_btn">
+                                    <a href="{% url 'checkout' %}" class="btn btn-md btn-golden">Make Payment</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        <!-- End Coupon Start -->
+    </div> <!-- ...:::: End Cart Section:::... -->
+
+     <!-- ::::::::::::::All JS Files here :::::::::::::: -->
+    <!-- Global Vendor, plugins JS -->
+    <script src="{% static 'assets/js/vendor/modernizr-3.11.2.min.js' %}"></script>
+    <script src="{% static 'assets/js/vendor/jquery-3.5.1.min.js' %}"></script>
+    <script src="{% static 'assets/js/vendor/jquery-migrate-3.3.0.min.js' %}"></script>
+    <script src="{% static 'assets/js/vendor/popper.min.js' %}"></script>
+    <script src="{% static 'assets/js/vendor/bootstrap.min.js' %}"></script>
+    <script src="{% static 'assets/js/vendor/jquery-ui.min.js' %}"></script>
+
+    <!--Plugins JS-->
+    <script src="{% static 'assets/js/plugins/swiper-bundle.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/material-scrolltop.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/jquery.nice-select.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/jquery.zoom.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/venobox.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/jquery.waypoints.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/jquery.lineProgressbar.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/aos.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/jquery.instagramFeed.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/ajax-mail.js' %}"></script>
+
+    <!-- Use the minified version files listed below for better performance and remove the files listed above -->
+    <!-- <script src="assets/js/vendor/vendor.min.js"></script>
+    <script src="assets/js/plugins/plugins.min.js"></script> -->
+
+    <!-- Main JS -->
+    <script src="{% static 'assets/js/main.js' %}"></script>
+</body>
+
+</html>
+
+{% endblock %}
