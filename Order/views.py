@@ -1,8 +1,11 @@
 from django.shortcuts import render,redirect
 from Cart.models import CartItem
+from Product.models import Product
 from .forms import OrderForm
-from .models import Order
+from .models import Order, OrderProduct, Payment
 import datetime 
+import json
+from django.http import JsonResponse
 # Create your views here.
 
 
@@ -48,17 +51,6 @@ def place_order(request,total=0,quantity=0):
             data.ip = request.META.get('REMOTE_ADDR')
             data.save()
 
-            # to generate order number
-            # year = int(datetime.date.today().strftime('%Y'))
-            # date = int(datetime.date.today().strftime('%d'))
-            # month = int(datetime.date.today().strftime('%m'))
-            # day = datetime.date(year,date,month)
-            # current_date = day.strftime("%Y%m%d")
-
-            # # 'current_date' + 'order_id' 
-            # order_number = current_date + str(data.id)
-            # data.order_number = order_number
-            # data.save()
 
 
             yr = int(datetime.date.today().strftime('%Y'))
@@ -85,4 +77,73 @@ def place_order(request,total=0,quantity=0):
 
 
 def payments(request):
-    return render(request,'UserSide/payment.html')
+    body = json.loads(request.body)
+    order = Order.objects.get(user = request.user, is_ordered = False, order_number = body['orderID'])
+    payment = Payment(
+        user = request.user,
+        payment_id = body['transID'],
+        payment_method = body['payment_method'],
+        amount_paid = order.order_total,
+        status =body['status']
+    )
+    payment.save()
+    order.payment = payment
+    order.is_ordered = True
+    order.save()
+
+    # Move cart item to orderd product table
+    cart_items = CartItem.objects.filter(user = request.user)
+
+    for cart_item in cart_items:
+        order_product =  OrderProduct()
+        order_product.order_id = order.id
+        order_product.payment = payment
+        order_product.user_id =  request.user.id
+        order_product.product_id = cart_item.product_id
+        order_product.quantity =  cart_item.quantity
+        order_product.product_price = cart_item.product.price
+        order_product.ordered = True
+        order_product.save()
+
+    #Reduce Quantity of procut
+        product = Product.objects.get( id = cart_item.product_id)
+        product.stock -= cart_item.quantity
+        product.save()
+    
+    #clear cart
+    CartItem.objects.filter(user = request.user).delete()
+
+    #send order number and Transaction id to Web page using 
+    data = {
+        'order_number': order.order_number,
+        'transID':payment.payment_id
+    }
+    return JsonResponse(data)
+
+
+def payments_completed(request):
+    order_number = request.GET.get('order_number')
+    transID = request.GET.get('payment_id')
+    try:
+        order = Order.objects.get(order_number = order_number, is_ordered=True)
+        print('try')
+        ordered_products = OrderProduct.objects.filter(order_id=order.id)
+
+        subtotal = 0
+        for i in ordered_products:
+            subtotal += i.product_price * i.quantity
+
+        payment = Payment.objects.get(payment_id=transID)
+
+        context = {
+            'order': order,
+            'ordered_products': ordered_products,
+            'order_number': order.order_number,
+            'transID': payment.payment_id,
+            'payment': payment,
+            'subtotal': subtotal,
+        }
+        return render(request, 'UserSide/payment-success.html', context)
+    except (Payment.DoesNotExist, Order.DoesNotExist):
+        print('exception')
+        return redirect('home')

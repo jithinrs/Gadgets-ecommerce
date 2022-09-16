@@ -41,10 +41,18 @@ def category_delete(request,id):
 
 #sub category views
 @staff_member_required(login_url='admin_login')
-def sub_category_list(request, id):
+def sub_category_list(request, id=None):
     sub_category=SubCategories.objects.filter(category = id)
     context={
-        'sub_category':sub_category
+        'sub_category':sub_category,
+    }
+    return render(request,'Category/sub-category.html',context)
+
+@staff_member_required(login_url='admin_login')
+def sub_category(request):
+    sub_category=SubCategories.objects.all()
+    context={
+        'sub_category':sub_category,
     }
     return render(request,'Category/sub-category.html',context)
 

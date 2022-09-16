@@ -1,4 +1,5 @@
 
+from urllib import request
 from django.shortcuts import render,redirect
 
 from Cart.models import Cart, CartItem
@@ -11,6 +12,7 @@ from .models import *
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.decorators import login_required
 from .form import RegistrtationForm,UserUpdationForm
+from Order.models import Order
 # Create your views here.
 def Register(request):
     if request.user.is_authenticated:
@@ -128,27 +130,40 @@ def verify_code(request):
 
 #user details
 
-def user_profile(request):
+
+def user_dashbord(request):
+    return render(request,'UserSide/dashbord/user-dashbord.html')
+
+def account_detail(request):
     user_details=Account.objects.filter(id = request.user.id)
     context={
         'user_detail':user_details
     }
-    return render(request,'UserSide/user-profile.html',context)
+    return render(request,'UserSide/dashbord/account-detail.html',context)
 
-def user_profile_update(request):
+def account_detail_update(request):
     id=Account.objects.get(id = request.user.id)
     if request.method == 'POST':
         form = UserUpdationForm(request.POST , request.FILES, instance=id)
         if form.is_valid():
-            print('form is valid')
             form.save()
-            return redirect(user_profile)
+            messages.error(request , 'Updated Successfully')
+            return redirect(account_detail)
         else:
-            # messages.error(request , 'Details is not valid please check it!!')
-            return redirect(user_profile)
+            messages.error(request , 'Details is not valid please check it!!')
+            return redirect(account_detail)
     else:
         form = UserUpdationForm(instance=id)
         context = {
             'form' : form,
         }
-    return render(request , 'UserSide/user-update.html' , context)
+    return render(request , 'UserSide/dashbord/account-detail-update.html' , context)
+
+
+# Address manage ment
+def addresses(request):
+    addresses=Order.objects.filter(user = request.user,email = request.user.email)
+    context={
+        'addresses':addresses
+    }
+    return render(request,'UserSide/dashbord/address.html',context)

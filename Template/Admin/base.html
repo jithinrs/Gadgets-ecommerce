@@ -48,6 +48,9 @@
   <!-- Custom js for this page-->
   <script src="{% static 'js/dashboard.js' %}"></script>
   <script src="{% static 'js/Chart.roundedBarCharts.js' %}"></script>
+
+
+
   <!-- End custom js for this page-->
 
   
@@ -134,6 +137,7 @@
             <div class="collapse" id="auth">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a  class="nav-link" href="{% url 'category' %}">Categories</a></li>
+                <li class="nav-item"> <a  class="nav-link" href="{% url 'sub_category_list' %}">Sub Categories</a></li>
               </ul>
             </div>
           </li>
