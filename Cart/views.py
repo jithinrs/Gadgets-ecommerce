@@ -3,6 +3,8 @@ from Product.models import Product
 from .models import  Cart, CartItem
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
+from Accounts.form import AddAddress
+from Order.models import Address
 # Create your views here.
 
 
@@ -126,9 +128,10 @@ def _cart_id(request):
 
 
 @login_required(login_url='login')
-def checkout(request,total=0, quantity=0, cart_items=None): 
+def checkout(request,total=0, quantity=0, cart_items=None):
+    address=Address.objects.filter(user = request.user)[:1].get()
+    addresses = Address.objects.filter(user  = request.user)
     try:
-
         if request.user.is_authenticated:   
             cart_items = CartItem.objects.filter(user=request.user, is_active=True)
        
@@ -145,5 +148,16 @@ def checkout(request,total=0, quantity=0, cart_items=None):
         'total':total,
         'quantity':quantity,
         'cart_items':cart_items, 
+        'detail':address,
+        'addresses':addresses
     }
     return render(request,'UserSide/checkout.html',context)
+
+def checkout_address(request,id):
+    print(id)
+    address = Address.objects.get(id=id)
+    print(address.first_name)
+    context={
+        'detail':address,
+    }
+    return render(request,'UserSide/dashbord/checkout-address.html',context)

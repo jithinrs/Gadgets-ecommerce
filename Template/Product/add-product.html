@@ -5,66 +5,64 @@
 
 {% block content %}
 
-
-
 <div class="card-body">
-  <form method='POST' action="" enctype="">
+  <form method='POST' action="" enctype="multipart/form-data">
   {% csrf_token %}
 
     <div class="form-group">
     <label>Product</label>
     {% render_field form.product_name id="product_name" placeholder="Name" class="form-control" %}
     </div>
-    <div class="form-group">
+    <div class="form-group d-none">
     <label>slug</label>
-    {% render_field form.slug  id="slug" placeholder="slug" class="form-control" %}
+    {% render_field form.slug  id="slug" placeholder="slug" class="form-control"   %}
     </div>
 
     <div class="form-group">
-      <label>brand</label>
+      <label>Brand Name</label>
       {% render_field form.brand  placeholder="brand" class="form-control" %}
     </div>
 
     <div class="form-group">
-      <label>price</label>
+      <label>Price</label>
       {% render_field form.price  placeholder="price" class="form-control" %}
     </div>
 
     <div class="form-group">
-      <label>image1</label>
+      <label>Imageg 1</label>
       {% render_field form.product_image_1   class="form-control" %}
     </div>
 
     <div class="form-group">
-      <label>image2</label>
+      <label>Imageg 2</label>
       {% render_field form.product_image_2  placeholder="brand" class="form-control" %}
     </div>
 
     <div class="form-group">
-      <label>image3</label>
+      <label>Imageg 3</label>
       {% render_field form.product_image_3  placeholder="brand" class="form-control" %}
     </div>
 
     <div class="form-group">
-      <label>image4</label>
+      <label>Imageg 4</label>
       {% render_field form.product_image_4  placeholder="brand" class="form-control" %}
     </div>
 
 
     <div class="form-group">
-      <label>discription</label>
+      <label>Discription</label>
       {% render_field form.product_description  placeholder="" class="form-control" %}
     </div>
 
     
     <div class="form-group">
-      <label>category</label>
+      <label>Category</label>
       {% render_field form.category_id class="form-control" %}
     </div>
 
 
     <div class="form-group">
-      <label>sub category</label>
+      <label>Sub Category</label>
       {% render_field form.subcategory_id class="form-control" %}
     </div>
 
@@ -73,15 +71,20 @@
       {% render_field form.stock class="form-control" %}
     </div>
     
- 
-
-    <button class="btn btn-primary btn-block" type="submit">SAVE</button>
+   <div class="form-gorup d-flex">
+      
+      <label class="">Is Active : </label>
+      {% render_field form.is_active class="ml-3" style="width:30px; height:23px" %}
+   </div>
+  
+  </div>
+  <div class="d-flex ml-auto">
+    <a class="btn btn-primary ml-auto mr-2" href="{% url 'product'  %}">Cancel</a>
+    <button class="btn btn-success" type="submit">Save</button>
+  </div>
   
   </form>
-</div>
-<!-- copy from here -->
-</div>
-<!-- content-wrapper ends -->
+  <!-- content-wrapper ends -->
 </div>
 <!-- main-panel ends -->
 <script>

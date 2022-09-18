@@ -23,7 +23,11 @@
                                 </div>
                             </div> <!-- End Single Sidebar Widget -->
     
-                            <!-- Start Single Sidebar Widget -->
+
+
+
+
+                            <!-- Start Single Sidebar Widget Brand -->
                             <div class="sidebar-single-widget">
                                 <h6 class="sidebar-title">PRODUCT CATEGORIES</h6>
                                 <div class="sidebar-content">
@@ -53,7 +57,35 @@
                                         </li>
                                     </ul>
                                 </div>
-                            </div> <!-- End Single Sidebar Widget -->
+                            </div>
+                            <!-- End Single Sidebar Widget Brand -->
+
+
+
+                            <!-- Start Single Sidebar Widget -->
+                            <div class="sidebar-single-widget">
+                                <h6 class="sidebar-title">BRANDS</h6>
+                                <div class="sidebar-content">
+                                    <ul class="sidebar-menu">
+                                        <li>
+                                            <ul class="sidebar-menu-collapse">
+                                                {% for product in brand_links %}
+                                                <li class="sidebar-menu-collapse-list">
+                                                    <div class="accordion">
+                                                        <a
+                                                            href="{% url 'brand_filtered' product.brand %}"
+                                                             class="accordion-title collapsed"
+                                                            >{{product.brand}}
+                                                        </a>
+                                                    </div>
+                                                </li> 
+                                                {%endfor%}
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- End Single Sidebar Widget -->
     
                         </div> <!-- End Sidebar Area -->
                     </div>
@@ -85,9 +117,15 @@
                                                             <span>sale</span>
                                                         </div>
                                                         <div class="action-link">
+                                                            {% if in_cart %}
+                                                            <div class="action-link-left">
+                                                                <a href="{% url 'cart' product.id %}" >View Cart</a>
+                                                            </div>
+                                                            {%else%}
                                                             <div class="action-link-left">
                                                                 <a href="{% url 'add_cart' product.id %}" >Add to Cart</a>
                                                             </div>
+                                                            {%endif%}
                                                         </div>
                                                     </div>
                                                     <div class="content">
@@ -128,6 +166,8 @@
             </div>
         </div> <!-- ...:::: End Blog List Section:::... -->
 
+
+        {% include 'UserSide/footer.html' %}
 
      <!-- ::::::::::::::All JS Files here :::::::::::::: -->
     <!-- Global Vendor, plugins JS -->

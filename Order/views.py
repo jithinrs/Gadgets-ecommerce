@@ -1,8 +1,9 @@
+
 from django.shortcuts import render,redirect
 from Cart.models import CartItem
 from Product.models import Product
 from .forms import OrderForm
-from .models import Order, OrderProduct, Payment
+from .models import Address, Order, OrderProduct, Payment
 import datetime 
 import json
 from django.http import JsonResponse
@@ -35,21 +36,24 @@ def place_order(request,total=0,quantity=0):
         if form.is_valid():
             # store  the billing informations
             data = Order()
-            data.user=user
-            data.first_name = form.cleaned_data['first_name']
-            data.last_name = form.cleaned_data['last_name']
-            data.phone = form.cleaned_data['phone']
-            data.email = form.cleaned_data['email']
-            data.address_line_1 = form.cleaned_data['address_line_1']
-            data.address_line_2 = form.cleaned_data['address_line_2']
-            data.country = form.cleaned_data['country']
-            data.state = form.cleaned_data['state']
-            data.city = form.cleaned_data['city']
+            #address detail 
+            detail = Address()
+            detail.user = data.user = request.user
+            detail.first_name = data.first_name = form.cleaned_data['first_name']
+            detail.last_name = data.last_name = form.cleaned_data['last_name']
+            detail.phone = data.phone = form.cleaned_data['phone']
+            detail.email = data.email = form.cleaned_data['email']
+            detail.address_line_1 = data.address_line_1 = form.cleaned_data['address_line_1']
+            detail.address_line_2 = data.address_line_2 = form.cleaned_data['address_line_2']
+            detail.country = data.country = form.cleaned_data['country']
+            detail.state = data.state = form.cleaned_data['state']
+            detail.city = data.city = form.cleaned_data['city']
             data.order_note = form.cleaned_data['order_note']
             data.order_total = grand_total
             data.delivery_charge = delivery_charge
             data.ip = request.META.get('REMOTE_ADDR')
             data.save()
+            detail.save()
 
 
 
@@ -68,10 +72,10 @@ def place_order(request,total=0,quantity=0):
                 'cart_items':cart_items,
                 'total':total,
                 'grand_total':grand_total,
-                'delivery_charge':delivery_charge
+                'delivery_charge':delivery_charge,
+                
             }
-            return render(request,'UserSide/payment.html',context)
-    
+            return render(request,'UserSide/payment.html',context)    
     else:
         return redirect('checkout')
 
@@ -147,3 +151,22 @@ def payments_completed(request):
     except (Payment.DoesNotExist, Order.DoesNotExist):
         print('exception')
         return redirect('home')
+
+
+
+def user_orders(requst):
+    orders = Order.objects.filter(user = requst.user)
+    context = {
+        'orders' : orders
+    }
+    return render(requst,'UserSide/dashbord/user-order-detail.html',context)
+
+
+def admin_orders_list(request):
+    orders = Order.objects.all()
+    context = {
+        'orders' : orders
+    }
+    return render(request,'Admin/admin-order-detail.html',context)
+
+

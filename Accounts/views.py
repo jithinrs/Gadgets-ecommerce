@@ -1,6 +1,6 @@
 
-from urllib import request
 from django.shortcuts import render,redirect
+from django.shortcuts import get_object_or_404
 
 from Cart.models import Cart, CartItem
 from Cart.views import _cart_id, add_cart
@@ -12,7 +12,7 @@ from .models import *
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.decorators import login_required
 from .form import RegistrtationForm,UserUpdationForm
-from Order.models import Order
+from Order.models import Address
 # Create your views here.
 def Register(request):
     if request.user.is_authenticated:
@@ -162,8 +162,66 @@ def account_detail_update(request):
 
 # Address manage ment
 def addresses(request):
-    addresses=Order.objects.filter(user = request.user,email = request.user.email)
+    addresses=Address.objects.filter(user = request.user)
     context={
         'addresses':addresses
     }
     return render(request,'UserSide/dashbord/address.html',context)
+
+
+#user add address
+def add_address(request):
+    if request.method == 'POST':
+        form = AddAddress(request.POST,request.FILES,)
+        if form.is_valid():
+            print('form is valid')
+            detail = Address()
+            detail.user = request.user
+            detail.first_name =form.cleaned_data['first_name']
+            detail.last_name = form.cleaned_data['last_name']
+            detail.phone =  form.cleaned_data['phone']
+            detail.email =  form.cleaned_data['email']
+            detail.address_line_1 =  form.cleaned_data['address_line_1']
+            detail.address_line_2  = form.cleaned_data['address_line_2']
+            detail.country =  form.cleaned_data['country']
+            detail.state =  form.cleaned_data['state']
+            detail.city =  form.cleaned_data['city']
+            detail.save()
+            messages.success(request,'Address is Added Successfully')
+            return redirect(addresses)
+        else:
+            messages.success(request,'Form is Not valid')
+            return redirect(addresses)
+    else:
+        form = AddAddress()
+        context={
+            'form':form
+        }    
+    return render(request,'UserSide/dashbord/user-add-address.html',context)
+
+#address update
+def update_address(request,id):
+    id=Address.objects.get(id = id)
+    if request.method == 'POST':
+        form = AddAddress(request.POST, instance=id)
+        if form.is_valid():
+            form.save()
+            messages.error(request , 'Updated Successfully')
+            return redirect(addresses)
+        else:
+            messages.error(request , 'Details is not valid please check it!!')
+            return redirect(addresses)
+    else:
+        form = AddAddress(instance=id)
+        context = {
+            'form' : form,
+        }
+    return render(request , 'UserSide/dashbord/user-address-update.html' , context)
+
+
+
+def delete_address(request,id):
+    address=Address.objects.get(id = id)
+    messages.success(request,"Address Deleted")
+    address.delete()
+    return redirect(addresses)

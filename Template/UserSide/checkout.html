@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-
+{% load widget_tweaks %}
 
     <!-- ...:::: Start Checkout Section:::... -->
     <div class="checkout-section">
@@ -11,167 +11,35 @@
             <div class="checkout_form" data-aos="fade-up" data-aos-delay="400">
                 <div class="row">
                     <div class="col-lg-6 col-md-6">
+                        <div class="card mb-3">
+                            <h5 class="card-header">DELIVERY ADDRESS</h5>    
+                            {% for item in addresses%}
+                                <div class="card-body form-check row">
+                                    <div class="col-12 d-flex">
+                                        <a
+                                            hx-get="{% url 'checkout_address' item.id %}" 
+                                            hx-trigger="click"
+                                            hx-target="#address_change"
+                                            hx-swap="outerHTML"
+                                        >
+                                            <input class="form-check-input d-block ml-1 mt-1" type="radio" name="flexRadioDefault">
+                                        </a>
+                                        <div class="d-block ml-2">
+                                            <p class="card-text mb-0"><b>{{item.full_name}}</b> ,{{item.address_line_1}},{{item.city}},{{item.state}}</p>
+                                            <p class="cart-text mb-0">{{item.email}}</p>
+                                            <p class="cart-text mb-0">{{item.phone}}</p>
+                                        </div>
+                                        <hr>
+                                    </div>              
+                                </div>                           
+                            {%endfor%}                      
+                        </div>
                         <form action="{% url 'place_order' %}" method="POST">
                             {% csrf_token %}
                             <h3>Billing Details</h3>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="default-form-box">
-                                        <label>First Name <span>*</span></label>
-                                        <input type="text" required="True" name="first_name">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="default-form-box">
-                                        <label>Last Name <span>*</span></label>
-                                        <input type="text" required="True" name="last_name">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="default-form-box">
-                                        <label>Phone<span>*</span></label>
-                                        <input type="text" name="phone" required="True">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="default-form-box">
-                                        <label> Email Address <span>*</span></label>
-                                        <input type="email" name="email"  required="True">
-                                    </div>
-                                </div>
-                                
+                            {% include 'UserSide/dashbord/checkout-address.html' %}
+                            
 
-                                <div class="col-6">
-                                    <div class="default-form-box">
-                                        <label>Address Line 1<span>*</span></label>
-                                        <input placeholder="House number and street name" type="text" name="address_line_1" required="True">
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="default-form-box">
-                                        <label>Address Line 2<span>*</span></label>
-                                        <input placeholder="House number and street name" type="text" name="address_line_2">
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="default-form-box">
-                                        <label>City <span>*</span></label>
-                                        <input type="text" name="city">
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="default-form-box">
-                                        <label>State<span>*</span></label>
-                                        <input type="text" name="state">
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="default-form-box">
-                                        <label for="country">country <span>*</span></label>
-                                        <select class="country_option nice-select wide" name="country" id="country">
-                                            <option value="India">India</option>
-                                            <option value="Algeria">Algeria</option>
-                                            <option value="Afghanistan">Afghanistan</option>
-                                            <option value="Ghana">Ghana</option>
-                                            <option value="Albania">Albania</option>
-                                            <option value="Bahrain">Bahrain</option>
-                                            <option value="Colombia">Colombia</option>
-                                            <option value="Dominican Republic">Dominican Republic</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-12">
-                                    <label class="checkbox-default" for="newShipping" data-bs-toggle="collapse"
-                                        data-bs-target="#anotherShipping">
-                                        <input type="checkbox" id="newShipping">
-                                        <span>Ship to a different address?</span>
-                                    </label>
-
-                                    <div id="anotherShipping" class="collapse mt-3" data-parent="#anotherShipping">
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <div class="default-form-box">
-                                                    <label>First Name <span>*</span></label>
-                                                    <input type="text">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="default-form-box">
-                                                    <label>Last Name <span>*</span></label>
-                                                    <input type="text">
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="default-form-box">
-                                                    <label>Company Name</label>
-                                                    <input type="text">
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="select_form_select default-form-box">
-                                                    <label for="countru_name">country <span>*</span></label>
-                                                    <select class="niceselect_option wide" name="cuntry"
-                                                        id="countru_name">
-                                                        <option value="2">Bangladesh</option>
-                                                        <option value="3">Algeria</option>
-                                                        <option value="4">Afghanistan</option>
-                                                        <option value="5">Ghana</option>
-                                                        <option value="6">Albania</option>
-                                                        <option value="7">Bahrain</option>
-                                                        <option value="8">Colombia</option>
-                                                        <option value="9">Dominican Republic</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-12">
-                                                <div class="default-form-box">
-                                                    <label>Street address <span>*</span></label>
-                                                    <input placeholder="House number and street name" type="text">
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="default-form-box">
-                                                    <input placeholder="Apartment, suite, unit etc. (optional)"
-                                                        type="text">
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="default-form-box">
-                                                    <label>Town / City <span>*</span></label>
-                                                    <input type="text">
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="default-form-box">
-                                                    <label>State / County <span>*</span></label>
-                                                    <input type="text">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="default-form-box">
-                                                    <label>Phone<span>*</span></label>
-                                                    <input type="text">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="default-form-box">
-                                                    <label> Email Address <span>*</span></label>
-                                                    <input type="text">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 mt-3">
-                                    <div class="order-notes">
-                                        <label for="order_note">Order Notes</label>
-                                        <textarea id="order_note"
-                                            placeholder="Notes about your order, e.g. special notes for delivery." name="order_note"></textarea>
-                                    </div>
-                                </div>
-                            </div>
                     </div>
                     <div class="col-lg-6 col-md-6">
                             <h3>Your order</h3>
@@ -202,8 +70,8 @@
                                             <td>₹{{total}}.00</td>
                                         </tr>
                                         <tr>
-                                            <th>Shipping</th>
-                                            <td><strong>₹0.00</strong></td>
+                                            <th>Delivery charge</th>
+                                            <td><strong>₹{{delivery_charge}}</strong></td>
                                         </tr>
                                         <tr class="order_total">
                                             <th>Order Total</th>
@@ -225,6 +93,8 @@
         </div>
     </div>
     <!-- ...:::: End Checkout Section:::... -->
+
+    {% include 'UserSide/footer.html' %}
 
      <!-- ::::::::::::::All JS Files here :::::::::::::: -->
     <!-- Global Vendor, plugins JS -->
@@ -253,6 +123,8 @@
 
     <!-- Main JS -->
     <script src="{% static 'assets/js/main.js' %}"></script>
+    <script src="https://unpkg.com/htmx.org@1.8.0" integrity="sha384-cZuAZ+ZbwkNRnrKi05G/fjBX+azI9DNOkNYysZ0I/X5ZFgsmMiBXgDZof30F5ofc" crossorigin="anonymous"></script>
+
 </body>
 
 </html>

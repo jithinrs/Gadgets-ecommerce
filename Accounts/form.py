@@ -1,4 +1,7 @@
+from dataclasses import field
 from django import forms
+
+from Order.models import Address
 from .models import Account
 
 # Create your forms here.
@@ -24,4 +27,15 @@ class UserUpdationForm(forms.ModelForm):
     class Meta:
         model=Account
         fields=['first_name','last_name' ,'email','mobile']
+
+class AddAddress(forms.ModelForm):
+    class Meta:
+        model = Address
+        fields=['first_name','last_name','phone','email','address_line_1','address_line_2','country','state','city']
+
+
+
+
+
+
 

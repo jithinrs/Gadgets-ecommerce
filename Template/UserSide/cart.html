@@ -30,8 +30,8 @@
                                     <tbody>
                                         <!-- Start Cart Single Item-->
                                         <tr>
-                                            <td class="product_name"><a href="product-details-default.html">{{ cart_item.product.product_name }}</a></td>
-                                            <td class="product_thumb"><a href="product-details-default.html"><img
+                                            <td class="product_name"><a >{{ cart_item.product.product_name }}</a></td>
+                                            <td class="product_thumb"><a ><img
                                                 src="{{ cart_item.product.product_image_1.url }}"
                                                 alt=""></a>
                                             </td>
@@ -39,25 +39,34 @@
                                             <td class="product_quantity">
                                                 <div class="col">
                                                     <div class="input-group input-spinner">
+                                                        {% if cart_item.quantity > 1 %}
                                                         <div class="input-group-prepend">
                                                             <a
                                                                 hx-get="{% url 'remove_cart' cart_item.product.id %}"
                                                                 hx-trigger="click"
                                                                 hx-target="#total-count"
                                                                 hx-swap="innerHTML"
-                                                                class="btn btn-light">
-                                                                <i class="fa fa-minus"></i>
+                                                                class="btn btn-primary">
+                                                                <i class="fa fa-minus pb-2"></i>
                                                             </a>
                                                         </div>
+                                                        {%else%}
+                                                        <div class="input-group-prepend">
+                                                            <div
+                                                                class="btn btn-light">
+                                                                <i class="fa fa-minus pb-2"></i>
+                                                            </div>
+                                                        </div>
+                                                        {%endif%}
                                                         <input type="text" class="form-control" value="{{ cart_item.quantity }}" >
                                                         <div class="input-group-append">
-                                                            <a class="btn btn-light"
+                                                            <a class="btn btn-primary"
                                                                 hx-get="{% url 'add_cart' cart_item.product.id %}"
                                                                 hx-trigger="click"
                                                                 hx-target="#total-count"
                                                                 hx-swap="innerHTML"
                                                                 >
-                                                                <i class="fa fa-plus"></i>
+                                                                <i class="fa fa-plus pb-2"></i>
                                                             </a>
                                                         </div>
                                                     </div>
@@ -151,6 +160,7 @@
     </div> <!-- ...::::End  About Us Center Section:::... -->
     {%endif%}
 
+    {% include 'UserSide/footer.html' %}
 
      <!-- ::::::::::::::All JS Files here :::::::::::::: -->
     <!-- Global Vendor, plugins JS -->

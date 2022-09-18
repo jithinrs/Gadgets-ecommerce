@@ -12,17 +12,19 @@
   </div>  
   {%endfor%}
     <!-- Modal -->
-    <a href="{% url 'add_sub_category' %}" class="btn btn-primary btn-md mb-2">Add Sub Category</a>
     <div class="grid-margin stretch-card">
       <div class="card">
         <div class="card-body">
-          <p class="card-title mb-0">Sub Categories</p>
+          <div class="d-flex">
+            <p class="card-title mb-0">Sub Categories</p>
+            <a href="{% url 'add_sub_category' %}" class="btn btn-success btn-md mb-0 ml-auto mr-5">Add Sub Category</a>
+          </div>
           <div class="table-responsive">
             <table class="table table-striped table-borderless">
               <thead>
                 <tr>
                   <th>Sub Category Name</th>
-                  <th>Slug</th>
+                  <th>Category</th>
                   <th>Created Date</th>
                 </tr>  
               </thead>
@@ -32,7 +34,7 @@
                 <td>
                     <a href="">{{object.sub_category_name}}</a>
                 </td>
-                <td>{{object.slug}}</td>
+                <td>{{object.category.category_name}}</td>
 
                 <td>{{object.category.created_at}}</td>
                 <td><button class="btn btn-danger"  data-toggle="modal" data-target="#exampleModalCenter" >Delete</button></td>

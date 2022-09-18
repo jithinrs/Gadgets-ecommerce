@@ -15,7 +15,7 @@
                         <!-- Start Large Image -->
                         <div class="product-large-image product-large-image-vartical swiper-container ml-5">
                             <div class="swiper-wrapper">
-                                <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
+                                <div class="product-image-large-image swiper-slide  img-responsive">
                                     <img src="{{item.product_image_1.url}}" alt="">
                                 </div>
                                 <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
@@ -78,18 +78,21 @@
                                 </ul>
                                 <a href="#" class="customer-review ml-2">(customer review )</a>
                             </div>
-                            <div class="price">{{item.price}}</div>
+                            <div class="price">₹{{item.price}}</div>
                             <p>{{item.product_description}}</p>
                         </div>
                         <!-- End  Product Details Text Area-->
                         <!-- Start Product Variable Area -->
                         <div class="product-details-variable">
+                            {% if item.stock <= 20 and item.stock > 0 %}
                             <h4 class="title">Available Options</h4>
                             <!-- Product Variable Single Item -->
                             <div class="variable-single-item">
-                                <div class="product-stock"> <span class="product-stock-in"><i
-                                            class="ion-checkmark-circled"></i></span> {{item.stock}} IN STOCK</div>
+                                <div class="product-stock text-danger"> <span class="product-stock-in">
+                                </span>Hurry Up Only <span class="text-dark">{{item.stock}}</span> Left in Stock!</div>
+                                </div>
                             </div>
+                            {%endif%}
 
                             <!-- Product Variable Single Item -->
                             <!-- <div class="variable-single-item">
@@ -105,12 +108,14 @@
                             </div> -->
                             <!-- Product Variable Single Item -->
                             <div class="d-flex align-items-center ">
-                                {% if product.stock <= 0 %}
+                                {% if item.stock <= 0 %}
                                 <h5 class="text-danger">Out of Stock</h5>
                                 {%else%}
-                                <div class="product-add-to-cart-btn">
-                                    <a href="{% url 'add_cart' item.id %}">+ Add To Cart</a>
-                                </div>
+
+                                    <div class="product-add-to-cart-btn">
+                                        <a href="{% url 'add_cart' item.id %}">+ Add To Cart</a>
+                                    </div>
+                                    
                                 {%endif%}
                             </div>
                         </div>
@@ -124,6 +129,7 @@
     </div>
     <!-- End Product Details Section -->
 
+    {% include 'UserSide/footer.html' %}
 
      <!-- ::::::::::::::All JS Files here :::::::::::::: -->
     <!-- Global Vendor, plugins JS -->
