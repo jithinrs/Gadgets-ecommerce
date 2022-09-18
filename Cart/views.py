@@ -160,4 +160,4 @@ def checkout_address(request,id):
     context={
         'detail':address,
     }
-    return render(request,'UserSide/dashbord/checkout-address.html',context)
+    return render(request,'Ussfjlkjsfjlksjflkjslfjklsjfheckout-address.html',context)
